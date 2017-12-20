@@ -1,34 +1,57 @@
 // export twitter keys
 var twitterKeys = require('./keys.js')
+var command, song, movie = ""
 
-if (process.argv[2]) {
-  var command = process.argv[2].toLowerCase()
-  var i = 3
-  var song = ""
-  if (process.argv[3]) {
+function getUserInputDefault(arr) {
+  if (arr[2]) {
+    command = arr[2].toLowerCase()
+    var i = 3
     song = ""
-    movie = ""
-  } else {
-    song = "The Sign Ace of Base"
-    movie = "Mr. Nobody"
-  }
-  while (process.argv[i] !== undefined) {
-    song += process.argv[i] + " "
-    movie += process.argv[i] + " "
-    i++;
+    if (arr[3]) {
+      song = ""
+      movie = ""
+    } else {
+      song = "The Sign Ace of Base"
+      movie = "Mr. Nobody"
+    }
+    while (arr[i] !== undefined) {
+      song += arr[i] + " "
+      movie += arr[i] + " "
+      i++;
+    }
   }
 }
 
-switch (command) {
-  case 'my-tweets':
-    displayTweets()
-    break
-  case 'spotify-this-song':
-    searchSong(song)
-    break
-  case 'movie-this':
-    searchMovie(movie)
-    break
+function getUserInput(arr) {
+  if (arr[0]) {
+    command = arr[0].toLowerCase()
+    var i = 1
+    song = ""
+    if (arr[1]) {
+      song = arr[1]
+      movie = arr[1]
+    } else {
+      song = "The Sign Ace of Base"
+      movie = "Mr. Nobody"
+    }
+  }
+}
+
+function liriBotCall() {
+  switch (command) {
+    case 'my-tweets':
+      displayTweets()
+      break
+    case 'spotify-this-song':
+      searchSong(song)
+      break
+    case 'movie-this':
+      searchMovie(movie)
+      break
+    case 'do-what-it-says':
+      readCommands()
+      break
+  }
 }
 
 function displayTweets () {
@@ -93,3 +116,18 @@ function searchMovie(movie) {
       }
     });
 }
+
+function readCommands() {
+  var fs = require('fs')
+  fs.readFile("random.txt", "utf8", function(error, data) {
+    if (error) {
+      return console.log(error)
+    }
+    var dataArr = data.split(",")
+    getUserInput(dataArr)
+    liriBotCall()
+  })
+}
+
+getUserInputDefault(process.argv)
+liriBotCall()
