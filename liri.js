@@ -3,8 +3,16 @@ var twitterKeys = require('./keys.js')
 
 if (process.argv[2]) {
   var command = process.argv[2].toLowerCase()
+  var i = 3
+  var song = ""
   if (process.argv[3]) {
-    var song = process.argv[3].toLowerCase()
+    song = ""
+  } else {
+    song = "The Sign Ace of Base"
+  }
+  while (process.argv[i] !== undefined) {
+    song += process.argv[i] + " "
+    i++;
   }
 }
 
@@ -52,10 +60,12 @@ function searchSong (song) {
     secret: 'c80f87cdce354508931da4dc8d50899f'
   })
 
-  spotify.search({ type: 'track', query: 'All the Small Things' }, function (err, data) {
+  spotify.search({ type: 'track', query: song }, function (err, data) {
     if (err) {
       return console.log('Error occurred: ' + err)
     }
-    console.log(data.tracks.items[0].artists[0].name)
+    console.log("Artist: " + data.tracks.items[0].artists[0].name)
+    console.log("Track: " + data.tracks.items[0].name)
+    console.log("Preview: " + data.tracks.items[0].preview_url)
   })
 }
