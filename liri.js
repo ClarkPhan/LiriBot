@@ -27,11 +27,11 @@ function displayTweets () {
     if (!error) {
       if (tweets.length >= 20) {
         for (var i = 0; i < 20; i++) {
-          console.log(tweets[i].text)
+          console.log(tweets[i].created_at + " " + tweets[i].text)
         }
       } else {
         for (var i = 0; i < tweets.length; i++) {
-          console.log(tweets[i].text)
+          console.log(tweets[i].created_at + " " + tweets[i].text)
         }
       }
     }
