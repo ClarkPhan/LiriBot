@@ -7,11 +7,14 @@ if (process.argv[2]) {
   var song = ""
   if (process.argv[3]) {
     song = ""
+    movie = ""
   } else {
     song = "The Sign Ace of Base"
+    movie = "Mr. Nobody"
   }
   while (process.argv[i] !== undefined) {
     song += process.argv[i] + " "
+    movie += process.argv[i] + " "
     i++;
   }
 }
@@ -22,6 +25,9 @@ switch (command) {
     break
   case 'spotify-this-song':
     searchSong(song)
+    break
+  case 'movie-this':
+    searchMovie(movie)
     break
 }
 
@@ -68,4 +74,22 @@ function searchSong (song) {
     console.log("Track: " + data.tracks.items[0].name)
     console.log("Preview: " + data.tracks.items[0].preview_url)
   })
+}
+
+function searchMovie(movie) {
+  var request = require("request");
+  var queryUrl = "http://www.omdbapi.com/?t=" + movie + "&y=&plot=short&apikey=trilogy";
+  
+  request(queryUrl, function(error, response, body) {
+      if (!error && response.statusCode === 200) {
+        var movieInfo = JSON.parse(body)
+        console.log("Title: " + movieInfo.Title)
+        console.log("Release Year: " + movieInfo.Year)
+        console.log("IMDB Rating: " + movieInfo.Ratings[0].Value)
+        console.log("Rotten Tomatoes Rating: " + movieInfo.Ratings[1].Value)
+        console.log("Country: " + movieInfo.Country)
+        console.log("Plot: " + movieInfo.Plot)
+        console.log("Actors: " + movieInfo.Actors)
+      }
+    });
 }
