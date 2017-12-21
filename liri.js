@@ -2,11 +2,10 @@
 require('dotenv').config()
 
 // Load the NPM Package inquirer
-var inquirer = require("inquirer");
+var inquirer = require('inquirer')
 
 // export twitter keys
 var twitterKeys = require('./keys.js')
-
 
 function getUserInputDefault (arr) {
   if (arr[2]) {
@@ -60,7 +59,7 @@ function liriBotCall () {
   }
 }
 
-function displayTweets () {
+function displayTweets (screen_name) {
   var Twitter = require('twitter')
 
   var client = new Twitter({
@@ -70,7 +69,7 @@ function displayTweets () {
     access_token_secret: twitterKeys.access_token_secret
   })
 
-  var params = {screen_name: 'cp17560740'}
+  var params = {screen_name: screen_name}
   client.get('statuses/user_timeline', params, function (error, tweets, response) {
     // If no error, display most recent 20 tweets
     if (!error) {
@@ -140,7 +139,7 @@ function inquirerSongPrompt () {
     {
       type: 'input',
       message: 'Enter a song to search',
-      name: "song"
+      name: 'song'
     }
   ]).then(function (inquirerResponse) {
     searchSong(inquirerResponse.song)
@@ -152,49 +151,61 @@ function inquirerMoviePrompt () {
     {
       type: 'input',
       message: 'Enter a movie to search',
-      name: "movie"
+      name: 'movie'
     }
   ]).then(function (inquirerResponse) {
     searchMovie(inquirerResponse.movie)
   })
 }
 
-function inquirerPrompt() {
+function inquirerTweetPrompt () {
+  inquirer.prompt([
+    {
+      type: 'input',
+      message: 'Enter a user to search',
+      name: 'screen_name'
+    }
+  ]).then(function (inquirerResponse) {
+    displayTweets(inquirerResponse.screen_name)
+  })
+}
+
+function inquirerPrompt () {
   inquirer
     .prompt([
       {
-        type: "list",
-        message: "What would you like to do?",
-        choices: ["my-tweets", "spotify-this-song", "movie-this", "do-what-it-says"],
-        name: "command"
+        type: 'list',
+        message: 'What would you like to do?',
+        choices: ['my-tweets', 'spotify-this-song', 'movie-this', 'do-what-it-says'],
+        name: 'command'
       },
       {
-        type: "confirm",
-        message: "Are you sure?",
-        name: "confirm",
-        default: true,
-      },
-    ]).then(function(inquirerResponse){
-      if (inquirerResponse.confirm) {
-        switch (inquirerResponse.command) {
-          case 'my-tweets':
-            displayTweets()
-            break
-          case 'spotify-this-song':
-            inquirerSongPrompt()
-            break
-          case 'movie-this':
-            inquirerMoviePrompt()
-            break
-          case 'do-what-it-says':
-            readCommands()
-            break
-        }
-      } else {
-        console.log("")
-        inquirerPrompt()
+        type: 'confirm',
+        message: 'Are you sure?',
+        name: 'confirm',
+        default: true
       }
-    })
+    ]).then(function (inquirerResponse) {
+    if (inquirerResponse.confirm) {
+      switch (inquirerResponse.command) {
+        case 'my-tweets':
+          inquirerTweetPrompt()
+          break
+        case 'spotify-this-song':
+          inquirerSongPrompt()
+          break
+        case 'movie-this':
+          inquirerMoviePrompt()
+          break
+        case 'do-what-it-says':
+          readCommands()
+          break
+      }
+    } else {
+      console.log('')
+      inquirerPrompt()
+    }
+  })
 }
 
 inquirerPrompt()
