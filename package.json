@@ -1,7 +1,33 @@
 {
+  "name": "liribot",
+  "version": "1.0.0",
+  "description": "Bot that takes in text input and returns twitter, spotify, and omdb data",
+  "main": "liri.js",
   "dependencies": {
     "node-spotify-api": "^1.0.7",
     "request": "^2.83.0",
-    "twitter": "^1.7.1"
-  }
+    "twitter": "^1.7.1",
+    "dotenv": "^4.0.0"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ClarkPhan/LiriBot.git"
+  },
+  "keywords": [
+    "Liri",
+    "Twitter",
+    "Spotify",
+    "OMDB",
+    "API"
+  ],
+  "author": "Clark Phan",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/ClarkPhan/LiriBot/issues"
+  },
+  "homepage": "https://github.com/ClarkPhan/LiriBot#readme"
 }
